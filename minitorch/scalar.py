@@ -150,6 +150,7 @@ class Scalar:
         return self.history is not None and self.history.last_fn is None
 
     def is_constant(self) -> bool:
+        # NOTE: This function does not work in current state as far as I can tell.
         return self.history is None
 
     @property
@@ -163,8 +164,14 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError("Need to implement for Task 1.3")
+        # NOTE: This safety check might not be necessary if chain_rule is always called internally with non-None input.
+        if d_output is None:
+            d_output = 1.0
+        return (
+            (inp, deriv)
+            for inp, deriv in zip(h.inputs, h.last_fn._backward(h.ctx, d_output))
+            if not inp.is_constant()
+        )
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """
