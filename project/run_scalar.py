@@ -108,8 +108,9 @@ class ScalarTrain:
 
 
 if __name__ == "__main__":
-    PTS = 59
-    HIDDEN = 15
-    RATE = 0.1
-    data = minitorch.datasets["Circle"](PTS)
+    random.seed(5)
+    PTS = 50
+    HIDDEN = 2
+    RATE = 0.5
+    data = minitorch.datasets["Simple"](PTS)
     ScalarTrain(HIDDEN).train(data, RATE)
